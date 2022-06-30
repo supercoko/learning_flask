@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <form action="/login" method="post">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        Email:
+                    </td>
+                    <td>
+    {#              此处的name 需要和 /login 里的wtf对象属性相同#}
+                        <input type="text" name="email">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Password:
+                    </td>
+                    <td>
+                        <input type="text" name="password">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <button>Login</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</body>
+</html>

@@ -4,6 +4,8 @@ from flask_migrate import Migrate
 import config
 from exts import db
 from flask import Response,session
+from form import LoginForm
+
 
 
 from models import Article,User,User_Extension
@@ -14,24 +16,40 @@ app.config.from_object(config)# 引用config
 db.init_app(app)
 
 migrate = Migrate(app,db)
+
+# 登录
+@app.route('/login',methods=['GET','POST'])
+def login():
+    if request.method == 'GET':
+        return render_template("login.html")
+    else:
+        form = LoginForm(request.form)
+        if form.validate():
+            return "Success"
+        else:
+            return 'something wrong'
+
+
 # ORM for sql
-
-
-
-
+# 一对一
 @app.route('/oto')
 def one_to_one():
     user = User.query.filter_by(id=1).first() # 等效于【0】
     extension1 =  User_Extension(school="UNSW")
     user.extension = extension1
-    db.session.add(user)
+    db.session.add(user,extension1)
     db.session.commit()
     return f"作者{user.name}"
+# 一对多
 @app.route('/otm')
 def one_to_many():
     article3 = Article(title="少女", content = '的白丝',setu='1')
     article4 = Article(title="少女", content='的黑丝',setu='2')
-    user = User(name = 'Miko')
+    print(User.query.filter_by(id=1).first())
+    if not User.query.filter_by(id=1).first():
+        user = User(name = 'Miko')
+    else:
+        user = User.query.filter_by(id=1).first()
     article3.author = user
     article4.author = user
     db.session.add(article3,article4)
