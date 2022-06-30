@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import config
 from exts import db
-from flask import Response
+from flask import Response,session
 
 
 from models import Article,User,User_Extension
@@ -99,12 +99,27 @@ def book_list():
     # 其他类型转换为jsonfy
     return jsonify(books)
 
+##  cookie set and get
 @app.route('/s_cookie')
 def s_cookie():
     response = Response("cookie 设置")
     response.set_cookie(key="user_id",value='coko')
     return response
-
+@app.route('/g_cookie')
+def get_cookie():
+    cookie = request.cookies.get("user_id")
+    return f"获取{cookie}"
+## set session and get session
+@app.route('/set_session')
+def set_session():
+    # 在flask中，session先吧数据加密， 再用session_i作为key，存放到cookie中
+    # session先加密在村塾到cooki中
+    session['username'] = 'coko2'
+    return f"Success"
+@app.route('/get_session')
+def get_session():
+    username = session.get('username')
+    return f"username is {username}"
 # 根目录
 @app.route('/')
 def index():  # put application's code here
